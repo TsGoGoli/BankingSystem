@@ -1,101 +1,140 @@
 # Banking System
 
-### მოკლე აღწერა
+### Short Description
 
-პროექტის მიზანია შეიქმნას საბანკო სისტემისთვის API, რომლის გამოყენებითაც მომხმარებლები შეძლებენ თანხების გადარიცხვას საკუთარ ან სხვა ანგარიშებზე და ATM-ით სარგებლობას.
+The goal of the project is to create an API for a banking system that allows users to transfer funds to their own or other accounts and use ATMs.
 
-სისტემის მენეჯერები კი შეძლებენ სხვადადასხვა ტიპის რეპორტების ნახვას.
+System managers will be able to view various types of reports.
 
-პროექტი მოიცავს რამდენიმე მოდულს. თითოეული მოდული შეგვიძლია განვიხილოთ როგორც დამოუკიდებელი სისტემა, თუმცა ზოგიერთი მოდული დამოკიდებულია სხვა მოდულების არსებობაზე. ამიტომ მათი იმპლემენტაცია უნდა მოხდეს თანმიმდევრობით.
+The project includes several modules. Each module can be considered as an independent system, but some modules depend on the existence of other modules. Therefore, their implementation should be done sequentially.
 
-### მოდულები
+### Modules
 
-- ინტერნეტბანკი
-    - ოპერატორი
-    - მომხმარებელი
-- ATM კლიენტი
-    - ბარათის ავტორიზაცია
-    - ATM ოპერაციები
-- რეპორტები
-    - მომხმარებლების სტატისტიკა
-    - ტრანზაქციების სტატისტიკა
+- Internet Banking
+    - Operator
+    - User
+- ATM Client
+    - Card Authorization
+    - ATM Operations
+- Reports
+    - User Statistics
+    - Transaction Statistics
 
-### ინტერნეტბანკი
+### Internet Banking
 
-ინტერნეტბანკი უნდა იყოს ვებ აპლიკაცია, რომლის საშუალებითაც ბანკის ოპერატორებს შეეძლებათ მომხმარებლების რეგისტრაცია, მათთვის საბანკო ანგარიშების შექმნა და ანაგირშებზე ბარათების დამატება.
+Internet Banking should be a web application that allows bank operators to register users, create bank accounts for them, and add cards to the accounts.
 
-**ოპერატორი**
+**Operator**
 
-ოპერატორს უნდა შეეძლოს ფიზიკური პირების რეგისტრაცია, რომლის დროსაც შეიყვანს შემდეგ მონაცემებს:
+The operator should be able to register individuals by entering the following information:
 
-- სახელი *
-- გვარი *
-- პირადი ნომერი *
-- დაბადების თარიღი *
-- ელ. ფოსტა *
-- პაროლი *
+- First Name *
+- Last Name *
+- Personal Number *
+- Date of Birth *
+- Email *
+- Password *
 
-მომხმარებლისთვის საბანკო ანგარიშის შექმნის დროს, ოპერატორს უნდა შეეძლოს მიუთითოს შემდეგი მონაცემები:
+When creating a bank account for a user, the operator should be able to specify the following information:
 
-- IBAN (რეგისტრაციის დროს უნდა მოხდეს IBAN-ის ვალიდაცია. არავალიდური IBAN-ით ოპერატორმა ვერ უნდა შეძლოს ანგარიშის შექმნა)
-- Amount (ანგარიშზე არსებული თანხა)
-- Currency (ვალუტა. უნდა იყოს ასარჩევი ველი. შესაძლო მნიშვნელობები: GEL, USD, EUR)
+- IBAN (IBAN validation should be performed during registration. The operator should not be able to create an account with an invalid IBAN)
+- Amount (the amount of money in the account)
+- Currency (should be a selectable field. Possible values: GEL, USD, EUR)
 
-ბარათის რეგისტრაციის დროს ოპერატორმა უნდა მიუთითოს შემდეგი მონაცემები:
+When registering a card, the operator should specify the following information:
 
-- ბარათის ნომერი
-- სახელი და გვარი
-- ბარათის ვადა (წელი, თვე)
-- 3 ნიშნა CVV კოდი (ონლაინ გადახდებისთვის)
-- 4 ნიშნა PIN კოდი (ATM-დან თანხის გამოსატანად)
+- Card Number
+- First and Last Name
+- Card Expiry Date (Year, Month)
+- 3-digit CVV code (for online payments)
+- 4-digit PIN code (for ATM withdrawals)
 
-**მომხმარებელი**
+**User**
 
-დარეგისტრირებულ მომხმარებლებს უნდა შეეძლოთ ოპერატორის მიერ მათთვის შექმნილი ანგარიშების და ბარათების ნახვა. 
+Registered users should be able to view the accounts and cards created for them by the operator.
 
-ინტერნეტბანკიდან მომხმარებელს უნდა შეეძლოს ორი ტიპის ტრანზაქციის შესრულება:
+From Internet Banking, the user should be able to perform two types of transactions:
 
-- საკუთარ ანგარიშებს შორის თანხის გადარიცხვა, რომლის დროსაც გადარიცხვის საკომისიო იქნება 0%
-- ბანკის სხვა ანგარიშზე გადარიცხვა, რომლის დროსაც გადარიცხვის საკომისიო იქნება 1% + 0.5 (ლარი/დოლარი/ევრო)
+- Transfer funds between their own accounts, with a transfer fee of 0%
+- Transfer to another bank account, with a transfer fee of 1% + 0.5 (GEL/USD/EUR)
 
-თანხის გადარიცხვისას გათვალისწინებული უნდა იყოს ანგარიშების ვალუტების კურსები. თუ ერთი ანგარიშის ვალუტა განსხვავდება მეორე ანგარიშის ვალუტისგან, უნდა მოხდეს თანხის კონვერტაცია წინასწარ განსაზღვრული კურსის მიხედვით.
+When transferring funds, the exchange rates of the account currencies should be taken into account. If the currency of one account differs from the currency of the other account, the amount should be converted based on a predefined exchange rate.
 
-### ATM კლიენტი
+### ATM Client
 
-ATM კლიენტისთვის საჭიროა შეიქმნას API, სადაც მომხმარებელს ბარათის ავტორიზაციის შემდეგ შეეძლება სხვადასხვა ოპერაციის ჩატარება.
+For the ATM client, an API should be created where the user can perform various operations after card authorization.
 
-**ბარათის ავტორიზაცია**
+**Card Authorization**
 
-ATM-ის ნებისმიერი ოპერაციის ჩასატარებლად საჭიროა ასევე მოხდეს ბარათის ავტორიზაცია.
+To perform any operation on the ATM, card authorization is required.
 
-ამისათვის მომხმარებელმა უნდა მიუთითოს ბარათის ნომერი და PIN კოდი.
+For this, the user must enter the card number and PIN code.
 
-ავტორიზაცია არ უნდა იყოს წარმატებული, თუ ბარათი ვადაგასულია.
+Authorization should not be successful if the card is expired.
 
-**ATM ოპერაციები**
+**ATM Operations**
 
-ავტორიზაციის შემდეგ, შესაძლებელი უნდა იყოს შემდეგი ოპერაციების ჩატარება:
+After authorization, the following operations should be possible:
 
-- ბალანსის ნახვა
-- თანხის გამოტანა GEL, USD ან EUR ვალუტაში
-- პინ კოდის შეცვლა
+- View Balance
+- Withdraw money in GEL, USD, or EUR
+- Change PIN code
 
-ATM-დან თანხის გამოტანის საკომისიო უნდა იყოს 2% და 24 საათის განმავლობაში შესაძლებელი უნდა იყოს მაქსიმუმ 10,000 ლარის გამოტანა.
+The ATM withdrawal fee should be 2%, and a maximum of 10,000 GEL can be withdrawn within 24 hours.
 
-### რეპორტები
+### Reports
 
-ბანკის მენეჯერებს უნდა შეეძლოთ შემდეგი ტიპის რეპორტების ნახვა (API-მ უნდა დააბრუნოს შედეგები JSON ფორმატში):
+Bank managers should be able to view the following types of reports (the API should return results in JSON format):
 
-- მომხმარებლების სტატისტიკა
-    - მიმდინარე წელს დარეგისტრირებული მომხმარებლების რაოდენობა
-    - ბოლო ერთი წლის განმავლობაში დარეგისტრირებული მომხმარებლების რაოდენობა
-    - ბოლო 30 დღეში დარეგისტრირებული მომხმარებლების რაოდენობა
-- ტრანზაქციების სტატისტიკა
-    - ბოლო 1 თვეში/6 თვეში/1წელში განხორციელებული ტრანზაქციების რაოდენობა
-    - ბოლო 1 თვეში/6 თვეში/1წელში ტრანზაქციებიდან მიღებული შემოსავალის მოცულობა (ლარში/დოლარში/ევროში)
-    - საშუალოდ ერთი ტრანზაქციიდან მიღებული შემოსავალი (ლარში/დოლარში/ევროში)
-    - ბოლო ერთ თვეში ტრანზაქციების რაოდენობა დღეების მიხედვით (ჩარტი)
-    - ATM-დან გამოტანილი თანხის ჯამური რაოდენობა
+- User Statistics
+    - Number of users registered this year
+    - Number of users registered in the last year
+    - Number of users registered in the last 30 days
+- Transaction Statistics
+    - Number of transactions made in the last 1 month/6 months/1 year
+    - Volume of income from transactions in the last 1 month/6 months/1 year (in GEL/USD/EUR)
+    - Average income from one transaction (in GEL/USD/EUR)
+    - Number of transactions in the last month by days (chart)
+    - Total amount of money withdrawn from ATMs
 
-  ### მონაცემთა ბაზა
+### Database
 ![image](https://github.com/user-attachments/assets/15fa0346-4874-475e-9cc2-91548aefd0e4)
+
+### Clean Architecture
+
+The project follows the principles of Clean Architecture to ensure separation of concerns and maintainability. The architecture is divided into several layers:
+
+- **Domain Layer**: Contains the core business logic and entities.
+- **Application Layer**: Contains the application services and business rules.
+- **Infrastructure Layer**: Contains the implementation of external services, repositories, and data access.
+- **Presentation Layer**: Contains the API controllers and user interface.
+
+### Web API
+
+The project provides a Web API for interacting with the banking system. The API is built using ASP.NET Core and follows RESTful principles. The API includes the following endpoints:
+
+- **Authentication**: Endpoints for user authentication and authorization.
+- **Internet Banking**: Endpoints for managing users, accounts, and cards.
+- **ATM Client**: Endpoints for card authorization and ATM operations.
+- **Reports**: Endpoints for generating various reports and statistics.
+
+### Technologies
+
+The project uses the following technologies:
+
+- **ASP.NET Core**: For building the web API.
+- **Entity Framework Core**: For data access and ORM.
+- **Dapper**: For executing raw SQL queries.
+- **Serilog**: For logging.
+- **Swagger**: For API documentation.
+- **JWT**: For authentication and authorization.
+- **SQL Server**: For the database.
+
+### Architectural Principles
+
+The project follows these architectural principles:
+
+- **Separation of Concerns**: Different layers handle different responsibilities.
+- **Dependency Injection**: Dependencies are injected to promote loose coupling.
+- **SOLID Principles**: The code adheres to SOLID principles to ensure maintainability and scalability.
+- **Clean Code**: The code is written in a clean and readable manner.
