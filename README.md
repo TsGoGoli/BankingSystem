@@ -1,4 +1,3 @@
-# FinalAssingment-Group8-NikaTsotne
 # Banking System
 
 ### მოკლე აღწერა
